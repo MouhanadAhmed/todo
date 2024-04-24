@@ -1,0 +1,25 @@
+.item{
+    cursor: pointer !important;
+    color: #02021D !important;
+}
+.item:hover {
+    color: #81D376  !important;
+}
+.item:visited, .item:active , .item:focus , .item.active{
+    background-color: #81D376 !important;
+}
+
+.link{
+    transition: all 0.5s;
+    color: #02021D !important;
+}
+.link:hover{
+    background-color: #C1F651 !important;
+    color: white !important;
+    transition: all 0.5s;
+    /* border: none !important; */
+}
+.link:active,.link.active , #active,button .active{
+    background: #02021D !important;
+    color: white !important;
+}

@@ -1,0 +1,29 @@
+.width{
+    width: 33% !important;
+  }
+  .blueInput{
+    border: 1px solid #02021D !important;
+    box-shadow: none !important;
+    color: #02021D !important;
+    position: relative;
+    z-index: 999 !important;
+  }
+  .redInput:focus{
+    border: 1px solid #F14E2E !important;
+    box-shadow: none !important;
+    color: #F14E2E !important;
+    position: relative;
+    z-index: 999 !important;
+  }
+  .redInput + label{
+    color: #F14E2E !important;
+  }
+  .blueInput  +label{
+    display: inline-block !important;
+    position: absolute !important;
+    top:-10px !important;
+    left:20px !important;
+    background-color:white;
+    z-index: 9999;
+    color:  #02021D ;
+  }

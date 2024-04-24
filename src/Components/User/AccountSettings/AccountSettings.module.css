@@ -1,0 +1,20 @@
+.width{
+  width: 33% !important;
+}
+.blueInput:focus{
+  border: 1px solid #3184FF !important;
+  box-shadow: none !important;
+  color: #3184FF !important;
+  position: relative;
+  z-index: 999 !important;
+}
+.redInput:focus{
+  border: 1px solid #F14E2E !important;
+  box-shadow: none !important;
+  color: #F14E2E !important;
+  position: relative;
+  z-index: 999 !important;
+}
+.redInput + label{
+  color: #F14E2E !important;
+}

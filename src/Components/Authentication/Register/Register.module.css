@@ -1,0 +1,38 @@
+.width{
+  width: 33% !important;
+}
+.button{
+        background: #f0c14b !important;
+        border-color: #a88734 #9c7e31 #846a29 !important;
+        color: #111 !important;
+      opacity: 0.9;
+}
+.button:hover{
+    border-color: #a88734 #9c7e31 #846a29 !important;
+    opacity: 1;
+}
+
+.blueInput:focus{
+  border: 1px solid #3184FF !important;
+  box-shadow: none !important;
+  color: #3184FF !important;
+  position: relative;
+  z-index: 999 !important;
+}
+.redInput:focus{
+  border: 1px solid #F14E2E !important;
+  box-shadow: none !important;
+  color: #F14E2E !important;
+  position: relative;
+  z-index: 999 !important;
+}
+.redInput + label{
+  color: #F14E2E !important;
+}
+
+
+@media  screen and (max-width:850px){
+  .width{
+    width: 80% !important;
+  }
+}
