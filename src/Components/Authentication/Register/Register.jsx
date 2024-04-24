@@ -34,21 +34,19 @@ export default function Register() {
 
   async function registerUser(values){
     setLoading(true);
-    // setError(null);
     let response =await sendRegisterData(values).catch((err)=> {
-      // setError(err.response.data.errors.param +": "+ err.response.data.errors.msg);
       setLoading(false);
       console.log(err);
       setError(err.response.data);
     })
-    console.log("response",response)
 
-    if(response.data.status === 201){
+    if(response?.data?.status === 201){
       navigate('/login')
     setLoading(false);
 
     }else{
-      setError(response.message);
+      setError(response.response.data.message);
+      setLoading(false);
     }
   }
 
