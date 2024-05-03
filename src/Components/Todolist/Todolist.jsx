@@ -22,7 +22,7 @@ export default function Todolist({ listId }) {
     fetchItems();
   }, []);
 
-  const handleCheckboxChange = async (item, archived) => {
+  const handleArchivedChange = async (item, archived) => {
     updateItem(item._id, { archived: archived} ).then(() =>  {
       fetchItems();
       toast.success(`${item.name} ${archived ? 'archived' : 'unarchived'} successfully`);
@@ -45,7 +45,7 @@ export default function Todolist({ listId }) {
     }
   };
 
-  const handleItemNameDoubleClick = async (listId, listName) => {
+  const handleUpdateItem = async (listId, listName) => {
     await updateItem(listId, { name: listName.trim()});
     fetchItems();
   };
@@ -64,12 +64,12 @@ export default function Todolist({ listId }) {
                 <input
                   type="checkbox"
                   checked={item.archived}
-                  onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                  onChange={(e) => handleArchivedChange(item, e.target.checked)}
                 />
                 <NameTxt
                   nameId = {item._id}
                   nameTxt = {item.name}
-                  updateEvent = {handleItemNameDoubleClick}
+                  updateEvent = {handleUpdateItem}
                   deleteEvent = {() => handleDeleteItem(item._id)}
                   >
                   </NameTxt>
@@ -93,12 +93,12 @@ export default function Todolist({ listId }) {
               <input
                 type="checkbox"
                 checked={item.archived}
-                onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                onChange={(e) => handleArchivedChange(item, e.target.checked)}
                 />
                 <NameTxt
                   nameId = {item._id}
                   nameTxt = {item.name}
-                  updateEvent = {handleItemNameDoubleClick}
+                  updateEvent = {handleUpdateItem}
                   deleteEvent = {handleDeleteItem}
                   >
                   </NameTxt>
