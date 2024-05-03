@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 
 export default function Todolist({ list }) {
   const [Items, setItems] = useState([]);
+  const [AddedItem, setAddedItem] = useState("");
 
   async function getItems () {
     const itemResponse = await axios.get(`http://localhost:8080/api/v1/item/${list._id}/list`);
@@ -36,6 +37,29 @@ export default function Todolist({ list }) {
     }
   };
 
+  const handleKeyPress = async (event) => {
+    if (event.key === "Enter" && AddedItem) {
+      try {
+        await axios.post(`http://localhost:8080/api/v1/item`,
+        {
+          "name": AddedItem,
+          "list": list._id,
+          "archived": false
+        });
+        getItems();
+        setAddedItem("")
+
+
+        toast.success(`${AddedItem} added successfully`);
+      } catch (error) {
+
+        toast.error('Error create new Item' + (error?.response?.data?.message && error.response.data.message));
+
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <div className="list">
       <div className="list-title">{list.name}</div>
@@ -51,10 +75,15 @@ export default function Todolist({ list }) {
                 <span>{item.name}</span>
           </li>
           ))}
-            {/* <li>
-              add
-            <input ></input>
-          </li> */}
+            <li>
+            <i className="fa-solid fa-add me-2"></i>
+            <input
+             value= {AddedItem}
+              onChange={(e) => setAddedItem(e.target.value)}
+              onKeyDown={(e) => handleKeyPress(e, AddedItem)}
+              type="text"
+            ></input>
+          </li>
         </ul>
       </div>
       <div className="list-title"></div>
