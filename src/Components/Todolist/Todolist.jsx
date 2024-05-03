@@ -3,12 +3,12 @@ import "./Todolist.css";
 import { toast } from 'react-hot-toast';
 import { getItems, createItem, updateItemArchivedStatus } from './ItemService.js';
 
-export default function Todolist({ list }) {
+export default function Todolist({ listId }) {
   const [Items, setItems] = useState([]);
   const [newItemValue, setNewItemValue] = useState("");
 
   async function fetchItems () {
-    getItems(list._id).then((items) =>  {
+    getItems(listId).then((items) =>  {
       console.log(Items);
       setItems(items);
     })
@@ -20,13 +20,6 @@ export default function Todolist({ list }) {
   useEffect(() => {
     fetchItems();
   }, []);
-
-  const formatDateTime = (dateTimeString) => {
-    const date = new Date(dateTimeString);
-    const formattedDate = date.toLocaleDateString();
-    const formattedTime = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-    return `${formattedDate} ${formattedTime}`;
-  };
 
   const handleCheckboxChange = async (item, archived) => {
     updateItemArchivedStatus(item._id,archived ).then(() =>  {
@@ -40,7 +33,7 @@ export default function Todolist({ list }) {
 
   const createNewItem = async (event) => {
     if (event.key === "Enter" && newItemValue) {
-      createItem(newItemValue.trimEnd().trimStart(), list._id).then(() =>  {
+      createItem(newItemValue.trimEnd().trimStart(), listId).then(() =>  {
         fetchItems();
         setNewItemValue("")
         toast.success(`${newItemValue} added successfully`);
@@ -52,8 +45,7 @@ export default function Todolist({ list }) {
   };
 
   return (
-    <div className="list">
-      <div className="list-title">{list.name}</div>
+    <div>
       <div className="list-content">
         <ul>
           {Items && Items.filter((item) => !item.archived).map((item) => (
@@ -77,7 +69,6 @@ export default function Todolist({ list }) {
           </li>
         </ul>
       </div>
-      <div className="list-title"></div>
       <div className="list-content">
         <ul>
           {Items && Items.filter((item) => item.archived).map((item) => (
@@ -91,12 +82,6 @@ export default function Todolist({ list }) {
             </li>
           ))}
         </ul>
-      </div>
-      <div className="list-footer">
-        <div className="list-actions">
-          <button>Delete</button>
-        </div>
-        <div className="list-date">Created: {formatDateTime(list.createdAt)}</div>
       </div>
     </div>
   );

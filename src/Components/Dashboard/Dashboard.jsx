@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import { toast } from 'react-hot-toast';
 import Todolist from "../Todolist/Todolist.jsx";
-import { getListData , createList } from "./listService.js";
+import { getListData, createList, deleteList } from "./listService.js";
 
 export default function Dashboard() {
   const [lists, setLists] = useState([]);
@@ -37,6 +37,26 @@ export default function Dashboard() {
     }
   };
 
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const formattedDate = date.toLocaleDateString();
+    const formattedTime = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  const deleteListData = async (list) => {
+    const listName = list.name;
+    deleteList(list._id)
+      .then(() => {
+        fetchLists();
+        toast.success(`${listName} deleted successfully`);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+
   return (
     <div className="container">
       <h4 className="py-4">
@@ -51,9 +71,18 @@ export default function Dashboard() {
       </h4>
       <div className="row row-cols-1 row-cols-md-2 g-4">
         {lists.map((list) => (
-          <div key={list._id} className="col">
-            <Todolist list = {list} ></Todolist>
-          </div>
+        <div className="list" key={list._id}>
+          <div className="list-title">{list.name}</div>
+            <div key={list._id} className="col">
+              <Todolist listId = {list._id} ></Todolist>
+            </div>
+            <div className="list-footer">
+              <div className="list-actions">
+                <button onClick={() => deleteListData(list)}>Delete</button>
+              </div>
+              <div className="list-date">Created: {formatDateTime(list.createdAt)}</div>
+            </div>
+        </div>
         ))}
       </div>
     </div>

@@ -13,9 +13,17 @@ export const getListData = async () => {
 
 export const createList = async (listName) => {
   try {
-    const response = await axios.post(`${API_URL}/list`, { name: listName });
-    return response.data;
+      const response = await axios.post(`${API_URL}/list`, { name: listName });
+      return response.data;
   } catch (error) {
     throw new Error(`Error create new List : ${error?.response?.data && error.response.data.message}`);
+  }
+};
+
+export const deleteList = async (listId) => {
+  try {
+      return await axios.delete(`${API_URL}/list/${listId}`);
+  } catch (error) {
+      throw new Error(`Error create new List : ${error?.response?.data && error.response.data.message}`);
   }
 };
