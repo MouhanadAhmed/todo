@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import { toast } from 'react-hot-toast';
 import Todolist from "../Todolist/Todolist.jsx";
-import { getListData, createList, deleteList } from "./listService.js";
+import { getListData, createList, deleteList, updateList } from "./listService.js";
+import NameTxt from  "../Name/NameTxt.jsx";
 
 export default function Dashboard() {
   const [lists, setLists] = useState([]);
@@ -23,7 +24,7 @@ export default function Dashboard() {
     fetchLists();
   }, []);
 
-  const handleKeyPress = async (event) => {
+  const AddNewList = async (event) => {
     if (event.key === "Enter" && newList) {
       createList(newList.trimEnd().trimStart())
       .then(() => {
@@ -56,6 +57,10 @@ export default function Dashboard() {
       });
   };
 
+  const handleListNameDoubleClick = async (listId, listName) => {
+    await updateList(listId, listName.trim());
+    fetchLists();
+  };
 
   return (
     <div className="container">
@@ -65,23 +70,30 @@ export default function Dashboard() {
           <input
               value= {newList}
               onChange = {(e) => setAddedNewlist(e.target.value)}
-              onKeyDown = {(e) => handleKeyPress(e, newList)}
+              onKeyDown = {(e) => AddNewList(e, newList)}
               type="text"
             ></input>
       </h4>
       <div className="row row-cols-1 row-cols-md-2 g-4">
         {lists.map((list) => (
         <div className="list" key={list._id}>
-          <div className="list-title">{list.name}</div>
-            <div key={list._id} className="col">
-              <Todolist listId = {list._id} ></Todolist>
+          <div className="list-title">
+            <NameTxt
+              nameId = {list._id}
+              nameTxt = {list.name}
+              triggerEvent = {handleListNameDoubleClick}
+              >
+              </NameTxt>
+          </div>
+          <div key={list._id} className="col">
+            <Todolist listId = {list._id} ></Todolist>
+          </div>
+          <div className="list-footer">
+            <div className="list-actions">
+              <button onClick={() => deleteListData(list)}>Delete</button>
             </div>
-            <div className="list-footer">
-              <div className="list-actions">
-                <button onClick={() => deleteListData(list)}>Delete</button>
-              </div>
-              <div className="list-date">Created: {formatDateTime(list.createdAt)}</div>
-            </div>
+            <div className="list-date">Created: {formatDateTime(list.createdAt)}</div>
+          </div>
         </div>
         ))}
       </div>

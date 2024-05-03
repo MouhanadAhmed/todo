@@ -23,10 +23,10 @@ export const createItem = async (itemName, listId) => {
   }
 };
 
-export const updateItemArchivedStatus = async (itemId, archived) => {
+export const updateItem = async (itemId, updated) => {
   try {
-    return axios.put(`${API_URL}/item/${itemId}`, { archived });
+    return axios.put(`${API_URL}/item/${itemId}`, updated);
   } catch (error) {
-    throw new Error(`Error updating archived status for item ${itemId}: ${error?.response?.data?.message}`);
+    throw new Error(`Error updating for item ${itemId}: ${error?.response?.data?.message}`);
   }
 };

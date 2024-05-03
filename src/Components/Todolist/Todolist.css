@@ -6,8 +6,9 @@
   font-weight: normal;
 }
 
-.list-content li span{
-  padding: 10px;
+.list-content li div{
+  padding-left: 10px;
+  display: inline-block;
 }
 
 .archived-item {

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Todolist.css";
 import { toast } from 'react-hot-toast';
-import { getItems, createItem, updateItemArchivedStatus } from './ItemService.js';
+import { getItems, createItem, updateItem } from './ItemService.js';
+import NameTxt from '../Name/NameTxt.jsx'
 
 export default function Todolist({ listId }) {
   const [Items, setItems] = useState([]);
@@ -22,7 +23,7 @@ export default function Todolist({ listId }) {
   }, []);
 
   const handleCheckboxChange = async (item, archived) => {
-    updateItemArchivedStatus(item._id,archived ).then(() =>  {
+    updateItem(item._id, { archived: archived} ).then(() =>  {
       fetchItems();
       toast.success(`${item.name} ${archived ? 'archived' : 'unarchived'} successfully`);
     })
@@ -44,6 +45,11 @@ export default function Todolist({ listId }) {
     }
   };
 
+  const handleItemNameDoubleClick = async (listId, listName) => {
+    await updateItem(listId, { name: listName.trim()});
+    fetchItems();
+  };
+
   return (
     <div>
       <div className="list-content">
@@ -55,7 +61,12 @@ export default function Todolist({ listId }) {
                   checked={item.archived}
                   onChange={(e) => handleCheckboxChange(item, e.target.checked)}
                 />
-                <span>{item.name}</span>
+                <NameTxt
+                  nameId = {item._id}
+                  nameTxt = {item.name}
+                  triggerEvent = {handleItemNameDoubleClick}
+                  >
+                  </NameTxt>
           </li>
           ))}
             <li>
@@ -73,12 +84,17 @@ export default function Todolist({ listId }) {
         <ul>
           {Items && Items.filter((item) => item.archived).map((item) => (
             <li key={item._id} className="archived-item" >
-                <input
-                  type="checkbox"
-                  checked={item.archived}
-                  onChange={(e) => handleCheckboxChange(item, e.target.checked)}
-                  />
-                  <span>{item.name}</span>
+              <input
+                type="checkbox"
+                checked={item.archived}
+                onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                />
+                <NameTxt
+                  nameId = {item._id}
+                  nameTxt = {item.name}
+                  triggerEvent = {handleItemNameDoubleClick}
+                  >
+                  </NameTxt>
             </li>
           ))}
         </ul>
