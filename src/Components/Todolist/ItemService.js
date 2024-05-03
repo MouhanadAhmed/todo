@@ -30,3 +30,11 @@ export const updateItem = async (itemId, updated) => {
     throw new Error(`Error updating for item ${itemId}: ${error?.response?.data?.message}`);
   }
 };
+
+export const deleteItem = async (itemId) => {
+  try {
+    return axios.delete(`${API_URL}/item/${itemId}`);
+  } catch (error) {
+    throw new Error(`Error updating for item ${itemId}: ${error?.response?.data?.message}`);
+  }
+};

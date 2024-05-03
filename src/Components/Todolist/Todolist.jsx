@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Todolist.css";
 import { toast } from 'react-hot-toast';
-import { getItems, createItem, updateItem } from './ItemService.js';
+import { getItems, createItem, updateItem, deleteItem } from './ItemService.js';
 import NameTxt from '../Name/NameTxt.jsx'
 
 export default function Todolist({ listId }) {
@@ -50,6 +50,11 @@ export default function Todolist({ listId }) {
     fetchItems();
   };
 
+  const handleDeleteItem = async (itemId) => {
+    await deleteItem(itemId);
+    fetchItems();
+  };
+
   return (
     <div>
       <div className="list-content">
@@ -64,7 +69,8 @@ export default function Todolist({ listId }) {
                 <NameTxt
                   nameId = {item._id}
                   nameTxt = {item.name}
-                  triggerEvent = {handleItemNameDoubleClick}
+                  updateEvent = {handleItemNameDoubleClick}
+                  deleteEvent = {() => handleDeleteItem(item._id)}
                   >
                   </NameTxt>
           </li>
@@ -92,7 +98,8 @@ export default function Todolist({ listId }) {
                 <NameTxt
                   nameId = {item._id}
                   nameTxt = {item.name}
-                  triggerEvent = {handleItemNameDoubleClick}
+                  updateEvent = {handleItemNameDoubleClick}
+                  deleteEvent = {handleDeleteItem}
                   >
                   </NameTxt>
             </li>

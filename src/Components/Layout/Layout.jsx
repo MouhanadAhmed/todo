@@ -2,7 +2,6 @@ import React from 'react'
 import'./Layout.module.css'
 import NavBar from '../NavBar/NavBar'
 import { Outlet, useNavigate,ScrollRestoration  } from 'react-router-dom'
-import Footer from '../Footer/Footer'
 import ScrollToTop from '../Helpers/ScrollToTop/ScrollToTop'
 
 export default function Layout({userData ,setUserData}) {
@@ -24,7 +23,6 @@ export default function Layout({userData ,setUserData}) {
     return location.key;
   }}
 />
-    {/* <Footer/> */}
     </>
   )
 }
