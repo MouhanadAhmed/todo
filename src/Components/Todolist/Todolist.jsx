@@ -3,33 +3,19 @@ import axios from "axios";
 import "./Todolist.css";
 import { toast } from 'react-hot-toast';
 
-export default function Todolist() {
-  const [lists, setLists] = useState([]);
+export default function Todolist({ list }) {
+  const [Items, setItems] = useState([]);
 
-  async function fetchNotes() {
-    try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/list");
-      const { Lists } = data.result;
-
-      const get = await Promise.all(Lists.map(async (list) => {
-        return await getItems(list, list)
-      }));
-      setLists(get);
-    } catch (error) {
-      toast.error('Error archiving item', error);
-    }
-  }
-
-  async function getItems (list) {
+  async function getItems () {
     const itemResponse = await axios.get(`http://localhost:8080/api/v1/item/${list._id}/list`);
     const { Items } = itemResponse.data.result;
-    let updatedLists = { ...list, Items };
-    console.log(updatedLists);
-    return updatedLists;
+
+    console.log(Items);
+    setItems(Items);
   };
 
   useEffect(() => {
-    fetchNotes();
+    getItems();
   }, []);
 
   const formatDateTime = (dateTimeString) => {
@@ -39,67 +25,58 @@ export default function Todolist() {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  const handleCheckboxChange = async (list, itemId, archived) => {
+  const handleCheckboxChange = async (item, archived) => {
     try {
-      await axios.put(`http://localhost:8080/api/v1/item/${itemId}`, { archived });
-      fetchNotes();
+      await axios.put(`http://localhost:8080/api/v1/item/${item._id}`, { archived });
+      getItems();
 
-      toast.success(`Item ${archived ? 'archived' : 'unarchived'} successfully`);
+      toast.success(`${item.name} ${archived ? 'archived' : 'unarchived'} successfully`);
     } catch (error) {
       toast.error('Error archiving item', error);
     }
   };
 
   return (
-    <div className="container">
-      <h3 className="py-4">Todo</h3>
-      <div className="row row-cols-1 row-cols-md-2 g-4">
-        {lists.map((list) => (
-          <div key={list._id} className="col">
-            <div className="list">
-              <div className="list-title">{list.name}</div>
-              <div className="list-content">
-                <ul>
-                  {list.Items && list.Items.filter((item) => !item.archived).map((item) => (
-                  <li key={item._id} >
-                       <input
-                          type="checkbox"
-                          checked={item.archived}
-                          onChange={(e) => handleCheckboxChange(item, item._id, e.target.checked)}
-                        />
-                        <span>{item.name}</span>
-                  </li>
-                  ))}
-                    {/* <li>
-                      add
-                    <input ></input>
-                  </li> */}
-                </ul>
-              </div>
-              <div className="list-title"></div>
-              <div className="list-content">
-                <ul>
-                  {list.Items && list.Items.filter((item) => item.archived).map((item) => (
-                    <li key={item._id} className="archived-item" >
-                        <input
-                          type="checkbox"
-                          checked={item.archived}
-                          onChange={(e) => handleCheckboxChange(item, item._id, e.target.checked)}
-                          />
-                          <span>{item.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="list-footer">
-                <div className="list-actions">
-                  <button>Delete</button>
-                </div>
-                <div className="list-date">Created: {formatDateTime(list.createdAt)}</div>
-              </div>
-            </div>
-          </div>
-        ))}
+    <div className="list">
+      <div className="list-title">{list.name}</div>
+      <div className="list-content">
+        <ul>
+          {Items && Items.filter((item) => !item.archived).map((item) => (
+          <li key={item._id} >
+                <input
+                  type="checkbox"
+                  checked={item.archived}
+                  onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                />
+                <span>{item.name}</span>
+          </li>
+          ))}
+            {/* <li>
+              add
+            <input ></input>
+          </li> */}
+        </ul>
+      </div>
+      <div className="list-title"></div>
+      <div className="list-content">
+        <ul>
+          {Items && Items.filter((item) => item.archived).map((item) => (
+            <li key={item._id} className="archived-item" >
+                <input
+                  type="checkbox"
+                  checked={item.archived}
+                  onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                  />
+                  <span>{item.name}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="list-footer">
+        <div className="list-actions">
+          <button>Delete</button>
+        </div>
+        <div className="list-date">Created: {formatDateTime(list.createdAt)}</div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const MyDetails = lazy(() => import('./Components/User/MyDetails/MyDetails'));
 const MyAddressBook = lazy(() => import('./Components/User/MyAddressBook/MyAddressBook'));
 const AccountSettings = lazy(() => import('./Components/User/AccountSettings/AccountSettings'));
 const Home = lazy(() => import('./Components/MainPage/Home/Home.jsx'));
-const Todolist = lazy(() => import('./Components/Todolist/Todolist.jsx'));
+const Dashboard = lazy(() => import('./Components/Dashboard/Dashboard.jsx'));
 
 function App() {
   useEffect(()=>{
@@ -63,7 +63,7 @@ function App() {
         {path:"accountSettings", element: <AccountSettings/>},
       ]},
       {path:"home" , element:<ProtectedRoute> <Home/></ProtectedRoute> },
-      {path:"todo" , element:<ProtectedRoute> <Todolist/></ProtectedRoute> },
+      {path:"dashboard" , element:<ProtectedRoute> <Dashboard/></ProtectedRoute> },
       {path:"*", element:<ProtectedRoute><NotFound/></ProtectedRoute>},
     ]}
   ])
