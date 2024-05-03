@@ -1,46 +1,39 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./Dashboard.css";
 import { toast } from 'react-hot-toast';
 import Todolist from "../Todolist/Todolist.jsx";
+import { getListData , createList } from "./listService.js";
 
 export default function Dashboard() {
   const [lists, setLists] = useState([]);
-  const [AddedNewList, setAddedNewlist] = useState("");
+  const [newList, setAddedNewlist] = useState("");
 
-  async function fetchLists() {
-    try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/list");
-
-      console.log(data);
-
-      const lists = data.result.Lists;
-      setLists(lists);
-    } catch (error) {
-      toast.error('Error fetching lists'+ error);
-    }
-  }
+  const fetchLists = () => {
+    getListData()
+      .then((listsData) => {
+        setLists(listsData);
+        console.log(listsData);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   useEffect(() => {
     fetchLists();
   }, []);
 
   const handleKeyPress = async (event) => {
-    if (event.key === "Enter" && setAddedNewlist) {
-      try {
-        await axios.post(`http://localhost:8080/api/v1/list`,
-        {
-          "name": AddedNewList.trim(),
-        });
-        fetchLists();
+    if (event.key === "Enter" && newList) {
+      createList(newList.trimEnd().trimStart())
+      .then(() => {
         setAddedNewlist("")
-        toast.success(`${AddedNewList} added successfully`);
-      } catch (error) {
-
-        toast.error('Error create new List ' + (error?.response?.data?.message && error.response.data.message));
-
-        console.log(error);
-      }
+        fetchLists();
+        toast.success(`${newList} added successfully`);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
     }
   };
 
@@ -50,9 +43,9 @@ export default function Dashboard() {
         <i className="fa-solid fa-add me-2"></i>
         <span>Add New List </span>
           <input
-              value= {AddedNewList}
+              value= {newList}
               onChange = {(e) => setAddedNewlist(e.target.value)}
-              onKeyDown = {(e) => handleKeyPress(e, AddedNewList)}
+              onKeyDown = {(e) => handleKeyPress(e, newList)}
               type="text"
             ></input>
       </h4>

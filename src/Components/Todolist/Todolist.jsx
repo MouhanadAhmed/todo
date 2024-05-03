@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./Todolist.css";
 import { toast } from 'react-hot-toast';
+import { getItems, createItem, updateItemArchivedStatus } from './ItemService.js';
 
 export default function Todolist({ list }) {
   const [Items, setItems] = useState([]);
-  const [AddedItem, setAddedItem] = useState("");
+  const [newItemValue, setNewItemValue] = useState("");
 
-  async function getItems () {
-    const itemResponse = await axios.get(`http://localhost:8080/api/v1/item/${list._id}/list`);
-    const { Items } = itemResponse.data.result;
-
-    console.log(Items);
-    setItems(Items);
+  async function fetchItems () {
+    getItems(list._id).then((items) =>  {
+      console.log(Items);
+      setItems(items);
+    })
+    .catch((error) => {
+      toast.error(error.message);
+    });
   };
 
   useEffect(() => {
-    getItems();
+    fetchItems();
   }, []);
 
   const formatDateTime = (dateTimeString) => {
@@ -27,36 +29,25 @@ export default function Todolist({ list }) {
   };
 
   const handleCheckboxChange = async (item, archived) => {
-    try {
-      await axios.put(`http://localhost:8080/api/v1/item/${item._id}`, { archived });
-      getItems();
-
+    updateItemArchivedStatus(item._id,archived ).then(() =>  {
+      fetchItems();
       toast.success(`${item.name} ${archived ? 'archived' : 'unarchived'} successfully`);
-    } catch (error) {
-      toast.error('Error archiving item', error);
-    }
+    })
+    .catch((error) => {
+      toast.error(error.message);
+    });
   };
 
-  const handleKeyPress = async (event) => {
-    if (event.key === "Enter" && AddedItem) {
-      try {
-        await axios.post(`http://localhost:8080/api/v1/item`,
-        {
-          "name": AddedItem,
-          "list": list._id,
-          "archived": false
-        });
-        getItems();
-        setAddedItem("")
-
-
-        toast.success(`${AddedItem} added successfully`);
-      } catch (error) {
-
-        toast.error('Error create new Item' + (error?.response?.data?.message && error.response.data.message));
-
-        console.log(error);
-      }
+  const createNewItem = async (event) => {
+    if (event.key === "Enter" && newItemValue) {
+      createItem(newItemValue.trimEnd().trimStart(), list._id).then(() =>  {
+        fetchItems();
+        setNewItemValue("")
+        toast.success(`${newItemValue} added successfully`);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
     }
   };
 
@@ -78,9 +69,9 @@ export default function Todolist({ list }) {
             <li>
             <i className="fa-solid fa-add me-2"></i>
             <input
-             value= {AddedItem}
-              onChange={(e) => setAddedItem(e.target.value)}
-              onKeyDown={(e) => handleKeyPress(e, AddedItem)}
+             value= {newItemValue}
+              onChange={(e) => setNewItemValue(e.target.value)}
+              onKeyDown={(e) => createNewItem(e, newItemValue)}
               type="text"
             ></input>
           </li>
