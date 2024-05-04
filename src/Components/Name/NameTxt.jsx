@@ -56,6 +56,7 @@ export default function NameTxt({nameId, nameTxt , updateEvent, deleteEvent}) {
             <i
               className="fa-solid fa-xmark fa-me-2"
               onClick={() => handleDelete()}
+              data-testid="delete-icon"
             ></i>
           )}
         </span>
