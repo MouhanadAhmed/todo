@@ -81,7 +81,7 @@ export default function Dashboard() {
             <NameTxt
               nameId = {list._id}
               nameTxt = {list.name}
-              triggerEvent = {handleListNameDoubleClick}
+              updateEvent = {handleListNameDoubleClick}
               >
               </NameTxt>
           </div>
