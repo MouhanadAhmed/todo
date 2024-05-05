@@ -20,8 +20,7 @@ const MyDetails = lazy(() => import('./Components/User/MyDetails/MyDetails'));
 const MyAddressBook = lazy(() => import('./Components/User/MyAddressBook/MyAddressBook'));
 const AccountSettings = lazy(() => import('./Components/User/AccountSettings/AccountSettings'));
 const Home = lazy(() => import('./Components/MainPage/Home/Home.jsx'));
-const DonateBlood = lazy(() => import('./Components/DonateBlood/DonateBlood.jsx'));
-const BloodRequests = lazy(() => import('./Components/BloodRequests/BloodRequests.jsx'));
+const Dashboard = lazy(() => import('./Components/Dashboard/Dashboard.jsx'));
 
 function App() {
   useEffect(()=>{
@@ -32,7 +31,6 @@ function App() {
 
   const [userData,setUserData]=useState(null);
 
-
   function saveUserData(){
     let encodedToken = localStorage.getItem('userToken');
     let decodedToken = jwtDecode(encodedToken);
@@ -41,8 +39,6 @@ function App() {
     setUserData(decodedToken);
     // console.log(decodedToken);
   }
-
-
 
   const routes= createBrowserRouter([
     { path:"",
@@ -64,31 +60,13 @@ function App() {
       {path:"userProfile", element: <ProtectedRoute><UserProfile /></ProtectedRoute> ,children:[
         {path:"myDetails", element: <MyDetails/>},
         {path:"myAddressBook", element: <MyAddressBook/>},
-        // {path:"myOrders", element: <MyOrders/>},
         {path:"accountSettings", element: <AccountSettings/>},
       ]},
-      // {path:"allorders", element:<ProtectedRoute><MyOrders/></ProtectedRoute>}, 
-      // {path:"payment", element:<ProtectedRoute><Payment/></ProtectedRoute>}, 
-      // {path:"shipping", element:<ProtectedRoute><Shipping/></ProtectedRoute>}, 
-      // {path:"checkout", element:<ProtectedRoute><Checkout/></ProtectedRoute>}, 
-      // {path:"wishlist", element:<ProtectedRoute><Wishlist/></ProtectedRoute>}, 
-      // {path:"cart", element:<ProtectedRoute><Cart/></ProtectedRoute>}, 
-      // {path:"brands", element:<ProtectedRoute><Brands/></ProtectedRoute>}, 
-      // {path:"brandproducts/:id", element:<ProtectedRoute><BrandProducts/></ProtectedRoute>}, 
-      // {path:"categoryproducts/:id", element:<ProtectedRoute><CategoryProducts/></ProtectedRoute>}, 
-      // {path:"featuredProducts", element:<ProtectedRoute> <FeaturedProducts/></ProtectedRoute> },
-
-      // {path:"products/:id", element:<ProtectedRoute> <Products/></ProtectedRoute> },
-      // {path:"product-details/:id", element:<ProtectedRoute> <ProductDetails/></ProtectedRoute> },
-      {path:"E-Commerce" , element:<ProtectedRoute> <Home/></ProtectedRoute> },
-      // {path:"donateBlood" , element:<ProtectedRoute> <DonateBlood/></ProtectedRoute> },
-      // {path:"bloodRequests" , element:<ProtectedRoute> <BloodRequests/></ProtectedRoute> },
+      {path:"home" , element:<ProtectedRoute> <Home/></ProtectedRoute> },
+      {path:"dashboard" , element:<ProtectedRoute> <Dashboard/></ProtectedRoute> },
       {path:"*", element:<ProtectedRoute><NotFound/></ProtectedRoute>},
     ]}
   ])
-
-
-
 
   return (
     // <CartContextProvider>

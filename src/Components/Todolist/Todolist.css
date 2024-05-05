@@ -1,0 +1,17 @@
+.list-content ul {
+  list-style-type: none; /* Remove default bullet points */
+}
+
+.list-content li {
+  font-weight: normal;
+}
+
+.list-content li div{
+  padding-left: 10px;
+  display: inline-block;
+}
+
+.archived-item {
+  text-decoration: line-through; /* Apply line-through text decoration */
+  color: #999; /* Change text color for archived items */
+}
